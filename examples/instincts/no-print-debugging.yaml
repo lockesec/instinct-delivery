@@ -1,0 +1,14 @@
+trigger: Writing a print() debugging line into a module
+action: |
+  A bare print() in library code is debugging residue. Use the logging module,
+  or remove it before committing.
+match_tools: [Edit, Write]
+match_paths: [".py"]
+match_content: ['(?m)^\s*print\(']
+match_exclude: ["tests/", "scripts/"]
+confidence: 0.6
+domain: code-quality
+tests:
+  - {tool: Edit, input: {file_path: src/app.py, new_string: "    print(x)"}, expect: fires}
+  - {tool: Edit, input: {file_path: src/app.py, new_string: "log.info(x)  # no print( here"}, expect: silent}
+  - {tool: Edit, input: {file_path: tests/test_app.py, new_string: "print(x)"}, expect: silent}
