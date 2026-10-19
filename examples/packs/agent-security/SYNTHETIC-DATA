@@ -1,0 +1,7 @@
+synthetic: true
+Every rule and every test case in this directory was written for this repository.
+The attack-shaped calls in the test cases are reconstructed from public write-ups of
+agent attacks (tool poisoning, a poisoned support ticket, an issue that asks an agent to
+publish private repository names, a settings edit that turns on auto-approval). None is a
+real transcript, none holds a real credential or a live address, and every download address
+uses a reserved name that cannot resolve (`.invalid`, `example.com`).
