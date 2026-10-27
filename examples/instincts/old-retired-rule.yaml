@@ -1,0 +1,8 @@
+trigger: Any edit (retired; kept to show that retired rules never fire)
+action: This rule is retired and must never be delivered.
+match_tools: [Edit, Write, Bash]
+status: retired
+domain: demo
+tests:
+  - {tool: Edit, input: {file_path: src/app.py, new_string: "x = 1"}, expect: fires}
+  - {tool: Read, input: {file_path: src/app.py}, expect: silent}

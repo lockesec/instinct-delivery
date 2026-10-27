@@ -1,0 +1,15 @@
+trigger: Editing a source file under src/
+action: |
+  You changed code under src/. Run the test suite before you report the change
+  as done, and say which tests you ran.
+match_tools: [Edit, Write]
+match_paths: ["src/"]
+confidence: 0.7
+domain: workflow
+follow:                 # acting on it: a test run within the next 5 calls
+  tools: [Bash]
+  commands: ["pytest", "npm test", "make test", "go test", "cargo test", "tox"]
+  within: 5
+tests:
+  - {tool: Edit, input: {file_path: src/app.py, new_string: "x"}, expect: fires}
+  - {tool: Edit, input: {file_path: docs/usage.md, new_string: "x"}, expect: silent}

@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "instinct-delivery"
+version = "0.1.0"
+description = "Deterministic lessons at the Claude Code tool call, with a measured delivery policy"
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+requires-python = ">=3.9"
+dependencies = ["PyYAML>=5.4"]
+keywords = ["claude-code", "hooks", "ai-agents", "context-engineering", "lessons"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Intended Audience :: Developers",
+    "Environment :: Console",
+    "Operating System :: POSIX",
+    "Development Status :: 4 - Beta",
+]
+
+[project.urls]
+Homepage = "https://github.com/lockesec/instinct-delivery"
+Documentation = "https://github.com/lockesec/instinct-delivery/tree/main/docs"
+Issues = "https://github.com/lockesec/instinct-delivery/issues"
+
+[project.scripts]
+instinct-delivery = "instinct_delivery.cli:main"
+
+[project.optional-dependencies]
+test = ["pytest>=7"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

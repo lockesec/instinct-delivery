@@ -1,0 +1,14 @@
+trigger: A shell command recursively force-deletes something
+action: |
+  Recursive force-delete: check the path is what you think it is. Prefer a
+  path under /tmp or the build directory, and never a variable that could be
+  empty (rm -rf "$DIR/" with an unset DIR deletes from the root).
+match_tools: [Bash]
+match_commands: ["rm -rf", "rm -fr"]
+match_exclude: ["/tmp/", "./build"]
+confidence: 0.9
+domain: safety
+tests:
+  - {tool: Bash, input: {command: "rm -rf \"$DIR/\""}, expect: fires}
+  - {tool: Bash, input: {command: "rm -rf /tmp/build-cache"}, expect: silent}
+  - {tool: Bash, input: {command: "rm notes.txt"}, expect: silent}
