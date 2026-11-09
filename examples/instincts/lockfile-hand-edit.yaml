@@ -1,0 +1,12 @@
+trigger: Editing a dependency lockfile by hand
+action: |
+  Lockfiles are generated. Change the manifest and regenerate the lockfile
+  instead of editing it; a hand edit is overwritten on the next install.
+match_tools: [Edit, Write]
+match_paths: ["package-lock.json", "poetry.lock", "uv.lock"]
+status: candidate   # being evaluated: logged when it matches, never shown
+confidence: 0.5
+domain: workflow
+tests:
+  - {tool: Edit, input: {file_path: package-lock.json, new_string: "x"}, expect: fires}
+  - {tool: Edit, input: {file_path: package.json, new_string: "x"}, expect: silent}

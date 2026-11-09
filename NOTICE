@@ -1,0 +1,12 @@
+instinct-delivery
+Licensed under the Apache License, Version 2.0 (see LICENSE).
+
+The concept and the name "instinct" (an atomic learned behaviour an agent
+carries, with a confidence score) come from ECC (formerly named everything-claude-code),
+https://github.com/affaan-m/ECC, skills/continuous-learning-v2, distributed
+under the MIT License. No ECC source code is included in this project: ECC's
+instincts are natural-language triggers, while the matcher, delivery policy,
+activation log and measurement tools here were written for this project.
+
+The rules in examples/instincts/ are synthetic, written for the demo and the
+tests. None of them records anyone's real history.

@@ -1,0 +1,20 @@
+trigger: Force-pushing
+action: |
+  Force-push rewrites shared history. Push to your own branch, or use
+  --force-with-lease so you cannot overwrite a teammate's commits.
+match_tools: [Bash]
+# --force but not --force-with-lease (which this rule recommends), within one command
+match_content: ['\bpush\b[^;&|\n]*\s(?:--force(?![\w-])|-f)(?=\s|$)']
+confidence: 0.8
+domain: safety
+follow:                 # acting on it: the next push uses --force-with-lease
+  tools: [Bash]
+  commands: ["--force-with-lease"]
+  within: 3
+tests:
+  - {tool: Bash, input: {command: "git push --force origin main"}, expect: fires}
+  - {tool: Bash, input: {command: "git push -f"}, expect: fires}
+  - {tool: Bash, input: {command: "git push origin feature"}, expect: silent}
+  - {tool: Bash, input: {command: "git push --force-with-lease origin feature"}, expect: silent}
+  - {tool: Bash, input: {command: "git push --force-with-lease && git push --force origin main"}, expect: fires}
+  - {tool: Bash, input: {command: "git push origin main -f"}, expect: fires}
