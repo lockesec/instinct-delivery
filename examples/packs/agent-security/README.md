@@ -22,6 +22,15 @@ they do not block anything, and an attack that never trips one of these shapes i
   heredoc start (a body written to a file). Still seen: a path in quotes with no space in it (`cat "$HOME/.ssh/id_rsa"`, the first
   quoted argument), `echo "$(cat ~/.ssh/id_rsa)"`, and `bash -c "cat ..."`. A `.env` must start its path component (`bed.env` is not one).
   A rule's path filter and content filter AND together, so a tool with a path and a tool with a command need separate files.
+- `credential-path-inventory`: a shell search for credential or wallet file NAMES whose list of paths is saved or passed on: `find`, `locate`,
+  `fd`, `ls -R` or `grep -rl` naming one strong name (`id_rsa`, `id_ed25519`, `keystore`, `UTC--`, `wallet`, `.aws/credentials`) or two
+  names of any kind (`.env`, `*.pem`, `*.key`, `secrets.json`, `Local Storage`, `IndexedDB`, ...), with a `>`/`>>` redirect, `tee`,
+  `-fprint` or a pipe onward (a pipe to `head`, `wc`, `sort` and other viewers does not count). It never opens a credential file, so the two
+  read rules above miss it. A lone weak name (`find . -name '*.key' > keys.txt`), a search that only prints, and `.env.example` are silent.
+  Not seen: a list kept in a variable (`p=$(find ...)`) and a search whose names are built at run time.
+- `wallet-keystore-read`: a `Read` or `Grep` of an Ethereum keystore (`.ethereum/keystore`, `UTC--...`), Electrum wallets, `wallet.dat`,
+  an Exodus wallet or MetaMask's extension directory. `credential-file-read` has none of these names.
+- `wallet-keystore-shell-read`: the shell half (`cat`, `head`, `base64`, `jq`, `grep`, `scp`, `cp` of such a file), read like `credential-file-shell-read`.
 - `secrets-table-query`: an SQL tool whose query reads (`from`, `join`) a table named like `token`, `secret`, `credential`, `password` or `api_key`.
   The tool list is exact: it names `mcp__supabase__execute_sql`; add yours (`mcp__postgres__execute_sql`, ...) to `match_tools`.
 - `secret-then-write`: `after:` a secrets-table query, within 20 calls, an SQL insert/update or a `curl`/`wget` POST.

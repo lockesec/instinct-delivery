@@ -4,12 +4,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "instinct-delivery"
-version = "0.1.0"
+version = "0.1.1"
 description = "Deterministic lessons at the Claude Code tool call, with a measured delivery policy"
 readme = "README.md"
 license = "Apache-2.0"
 license-files = ["LICENSE", "NOTICE"]
-requires-python = ">=3.9"
+authors = [{ name = "locke" }]
+requires-python = ">=3.11"
 dependencies = ["PyYAML>=5.4"]
 keywords = ["claude-code", "hooks", "ai-agents", "context-engineering", "lessons"]
 classifiers = [

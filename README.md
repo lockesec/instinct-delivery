@@ -40,7 +40,7 @@ specific to your machine. If `.claude/settings.json` is committed, that path goe
 and fails where it does not exist; run `instinct-delivery install --local` to write
 `.claude/settings.local.json` (per machine, not committed) instead. `install` prints the path
 it recorded.
-Needs Python 3.9+ and PyYAML, on a POSIX system. If your system Python is externally
+Needs Python 3.11+ and PyYAML, on a POSIX system. If your system Python is externally
 managed (PEP 668: Debian, Ubuntu, recent Homebrew), use a virtual environment or `pipx`.
 
 ## Quick start
@@ -104,7 +104,7 @@ Different filter kinds AND together; entries in one list OR together.
 - Every key, including `match_paths`, `match_commands`, `match_exclude`, `confidence`,
   `status: candidate` (logged, never shown) and `after:`: [docs/rules.md](docs/rules.md).
 - [`examples/instincts/`](examples/instincts): 8 synthetic rules to copy from.
-- [`examples/packs/agent-security`](examples/packs/agent-security): a 9-rule pack built on `after:`.
+- [`examples/packs/agent-security`](examples/packs/agent-security): a 12-rule pack built on `after:`.
 - `sh examples/demo.sh --tour`: six scripted calls through every delivery kind (full, brief,
   a Bash write, a shadowed candidate, a withheld rule, a truncated one).
 - `instinct-delivery replay FILE.jsonl` runs recorded calls through the real engine.

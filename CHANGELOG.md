@@ -1,6 +1,15 @@
 # Changelog
 
-## 0.1.0 (unreleased)
+## 0.1.1 (2026-11-09)
+
+- Python 3.11 or newer is required (3.9 and 3.10 are end-of-life). CI tests 3.11 to 3.14 on `ubuntu-latest`.
+- **agent-security pack: `credential-path-inventory`.** Fires on a shell search for credential or wallet file
+  names (`find`, `locate`, `fd`, `ls -R`, `grep -rl`) whose paths are written to a file or piped onward: the
+  enumeration step that precedes collecting the files, which the read rules do not see.
+- **agent-security pack: `wallet-keystore-read`** (a `Read`/`Grep` of an Ethereum keystore, Electrum wallet or
+  `wallet.dat`) and its shell half **`wallet-keystore-shell-read`**; `credential-file-read` had none of these names.
+
+## 0.1.0 (2026-11-09)
 
 First public release. What it does:
 

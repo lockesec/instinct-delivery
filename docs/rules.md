@@ -3,7 +3,7 @@
 ## Set up a project
 
 ```console
-git clone https://github.com/lockesec/instinct-delivery            # Python 3.9+, PyYAML
+git clone https://github.com/lockesec/instinct-delivery            # Python 3.11+, PyYAML
 pip install ./instinct-delivery        # a plain pip install of the git URL omits examples/
 cd your-project
 instinct-delivery install                    # registers the hook in .claude/settings.json
