@@ -155,7 +155,9 @@ def test_forty_large_legitimate_files_load_inside_a_time_bound(rules):
     t = time.monotonic()
     rs = load_rules(rules)
     took = time.monotonic() - t
-    assert took < 6, f"loading took {took:.1f}s"
+    # The bound catches PATHOLOGICAL loading (minutes, as before the size caps), not a slow
+    # machine: shared CI runners on older Pythons take 6-7 s for this, so 6 s failed at random.
+    assert took < 20, f"loading took {took:.1f}s"
     assert len(rs.fire) < 40 and rs.rejected          # the excess is rejected, not silently dropped
 
 
