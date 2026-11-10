@@ -72,16 +72,44 @@ def test_doctor_cannot_call_an_unreadable_log_clean(rules, settings, capsys, reg
     assert code == 2 and "cannot be read" in out
 
 
-@pytest.mark.parametrize("text,why", [
-    ('{"tool_name":"Read","tool_input":{"x":' + "[" * 100000 + "]" * 100000 + "}}", "nested"),
-])
-def test_a_call_the_hook_cannot_read_leaves_a_trace(rules, settings, capsys, registered, text, why):
+DEEP = '{"tool_name":"Read","tool_input":{"x":' + "[" * 100000 + "]" * 100000 + "}}"
+
+
+def test_a_call_the_hook_cannot_read_leaves_a_trace(rules, settings, capsys, registered, monkeypatch):
+    # Forced, so the trace path is tested on every Python: how deep json.loads can go is a
+    # property of the interpreter (CPython 3.14.10 parses DEEP; 3.14.2 raises RecursionError).
     write_rule(rules, "a", match_tools=["Read"])
-    code, out, err = _hook(text, settings)
-    assert (code, out) == (0, "") and why in err
+    real = json.loads
+
+    def too_deep(s, *a, **k):
+        if isinstance(s, str) and s.startswith('{"tool_name"'):
+            raise RecursionError
+        return real(s, *a, **k)
+    with monkeypatch.context() as m:
+        m.setattr(hook.json, "loads", too_deep)
+        code, out, err = _hook('{"tool_name":"Read","tool_input":{}}', settings)
+    assert (code, out) == (0, "") and "nested" in err
     assert [r["delivery"] for r in log_rows(settings)] == ["unevaluated"]
     code, out = _doctor(settings, capsys)
     assert code == 1 and "could not be read at all" in out
+
+
+def test_a_very_deep_call_is_either_read_or_traced_never_silent(rules, settings):
+    # The real input: this interpreter either reads it (and the rule is evaluated) or cannot
+    # (and the call leaves a trace). Silence with no trace is the one wrong answer.
+    write_rule(rules, "a", match_tools=["Read"])
+    try:
+        json.loads(DEEP)
+        readable = True
+    except RecursionError:
+        readable = False
+    code, out, err = _hook(DEEP, settings)
+    assert code == 0
+    if readable:
+        assert "INSTINCT a" in out
+    else:
+        assert out == "" and "nested" in err
+        assert [r["delivery"] for r in log_rows(settings)] == ["unevaluated"]
 
 
 def test_an_exclusion_by_name_reads_only_the_file_name(rules, settings):
